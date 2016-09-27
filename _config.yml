@@ -19,3 +19,9 @@ github_username:  becomingwisest
 
 # Build settings
 markdown: kramdown
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - Makefile
+  - s3_website.yml
