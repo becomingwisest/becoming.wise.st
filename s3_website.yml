@@ -11,9 +11,9 @@ cloudfront_distribution_id: E3TIBE6BEWMLSS
 # index_document: index.html
 # error_document: error.html
 
-# max_age:
-#   "assets/*": 6000
-#   "*": 300
+max_age:
+  "css/*": 6000000
+  "*": 300
 
 # gzip:
 #   - .html
