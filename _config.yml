@@ -29,3 +29,5 @@ exclude:
 # Based on http://garthdb.com/writings/i-am-a-jekyll-god/
 sass:
   style: compressed
+
+destination: _site
