@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>I&#39;ve finished school, but I&#39;m still learning.</title>
-  <meta name="description" content="">
+  <title>Playing with: YubiKey4</title>
+  <meta name="description" content="Back in March, I got a Yubikey4. I already had two of the Github branded U2F devices, but I’ve always enjoyed security and public key crypto. The YubiKey4 su...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="https://becoming.wise.st/">
+  <link rel="canonical" href="https://becoming.wise.st/2016/09/29/playing-with-yubikey.html">
   <link rel="alternate" type="application/rss+xml" title="I've finished school, but I'm still learning." href="https://becoming.wise.st/feed.xml">
 </head>
 
@@ -54,113 +54,66 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Playing with: YubiKey4</h1>
+    <p class="post-meta"><time datetime="2016-09-29T05:08:00+00:00" itemprop="datePublished">Sep 29, 2016</time></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Nov 9, 2016</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>Back in March, I got a <a href="https://www.yubico.com/products/yubikey-hardware/yubikey4/">Yubikey4</a>. I already had two of the <a href="https://www.yubico.com/products/yubikey-hardware/fido-u2f-security-key/">Github branded U2F devices</a>, but I’ve always enjoyed security and public key crypto. The YubiKey4 supports 4096 bit GPG keys, which should last a while.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/11/09/Voting.html">Personal: Voting</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Nov 5, 2016</span>
+<p>I already had <a href="https://gpgtools.org/">GPGTools</a> installed, so now it was a question of how to set it up. With some searching I found <a href="https://www.esev.com/blog/post/2015-01-pgp-ssh-key-on-yubikey-neo/">Eric Severance’s blog post: PGP and SSH keys on a Yubikey NEO</a>, and used that to crib my setup. I kept failing setting it up, or at least accessing the key afeter import. With some searching, I probably found <a href="https://developers.yubico.com/yubico-piv-tool/YubiKey_PIV_introduction.html">YubiKey PIV introduction</a> which provides:</p>
 
-        <h2>
-          <a class="post-link" href="/2016/11/05/Bookshelf-Continuous-Delivery.html">Bookshelf: Continuous Delivery</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 29, 2016</span>
+<blockquote>
+  <p>The default PIN code is 123456. The default PUK code is 12345678.
+The default 3DES management key (9B) is 010203040506070801020304050607080102030405060708.</p>
+</blockquote>
 
-        <h2>
-          <a class="post-link" href="/2016/10/29/Streaks-Building-Habits.html">Streaks: Building Habits</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 23, 2016</span>
+<p>After playing around a few times, I settled on using BF2D00BCEC46EA7B for work and personal use. I followed the directions to get my key usable with ssh via the <code class="highlighter-rouge">gpgkey2ssh</code> tool. I added gpg-agent support with my .bash_profile having<code class="highlighter-rouge">[[ -e /Users/christopher.evans/.gnupg/S.gpg-agent.ssh ]] &amp;&amp; export SSH_AUTH_SOCK=/Users/christopher.evans/.gnupg/S.gpg-agent.ssh</code>. I actually don’t remember how I get the gpg agent to start, unless its something part of the GPGTool suite.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/10/23/PuppetConf-2016.html">PuppetConf: 2016 (Upgrading, Community, and Culture)</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 15, 2016</span>
+<p>One thing that seemed to not work is U2F. I tried adding it to my GitHub account, I tried gmail, I even tried the <a href="https://demo.yubico.com/u2f">demo Yubico</a> has. No joy, time to email support. Since I gave them the guide I used, they quickly pointed out that <code class="highlighter-rouge">ykpersonalize -m82</code> was the right approach for YubiKey NEOs sold before September 2014. But since then U2F support has come out, and <code class="highlighter-rouge">-m86</code> is needed. The <a href="https://developers.yubico.com/yubikey-personalization/Manuals/ykpersonalize.1.html">ykpersonalize</a> man page describes the modes:</p>
 
-        <h2>
-          <a class="post-link" href="/2016/10/15/my-community-hangops.html">My community, hangops</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 8, 2016</span>
+<blockquote>
+  <p>-m mode</p>
 
-        <h2>
-          <a class="post-link" href="/2016/10/08/be-sure-to-leave-a-trail.html">Note: Be sure to leave a trail</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 29, 2016</span>
+  <p>set device configuration for the YubiKey. It is parsed in the form mode:cr_timeout:autoeject_timeout</p>
 
-        <h2>
-          <a class="post-link" href="/2016/09/29/playing-with-keybaseio-git-jekyll.html">Playing with: Keybase.io, git, and Jekyll</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 29, 2016</span>
+  <p>where mode is:</p>
 
-        <h2>
-          <a class="post-link" href="/2016/09/29/playing-with-yubikey.html">Playing with: YubiKey4</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 27, 2016</span>
+  <p>0
+OTP device only.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/09/27/blog-to-follow-julia-evans.html">Blog to follow: Julia Evans (@b0rk)</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 8, 2016</span>
+  <p>1
+CCID device only.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/05/08/welcome-to-jekyll.html">Switching to Jekyll!</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Mar 5, 2013</span>
+  <p>2
+OTP/CCID composite device.</p>
 
-        <h2>
-          <a class="post-link" href="/2013/03/05/i-am-a-linux-enthusiast.-thanks-scale.html">I AM A LINUX ENTHUSIAST. Thanks SCaLE.</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Feb 18, 2013</span>
+  <p>3
+U2F device only.</p>
 
-        <h2>
-          <a class="post-link" href="/2013/02/18/blog-to-follow-a-few-thoughts-on-cryptographic-engineering.html">Blog to follow: A Few Thoughts on Cryptographic Engineering</a>
-        </h2>
-      </li>
-    
-  </ul>
+  <p>4
+OTP/U2F composite device.</p>
 
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+  <p>5
+U2F/CCID composite device.</p>
 
-</div>
+  <p>6
+OTP/U2F/CCID composite device. Add 80 to set MODE_FLAG_EJECT, for example: 81</p>
+
+  <p>cr_timeout is the timeout in seconds for the YubiKey to wait on button press for challenge response (default is 15)</p>
+
+  <p>autoeject_timeout is the timeout in seconds before the card is automatically ejected in mode 81</p>
+</blockquote>
+
+<p>With that quick fix, I now have a good GPG key, usable with SSH, and my accounts that can use U2F do. Recently Yubico has announced <a href="https://www.yubico.com/2016/09/yubikey-works-windows-hello/">Windows 10 Hello</a> support, <a href="https://www.yubico.com/2016/09/yubikey-smart-card-support-for-macos-sierra-2/">MacOS 10.12 Sierra</a> support, and even has a <a href="https://www.yubico.com/2016/07/over-a-dozen-services-supporting-fido-u2f/">short list of sites</a> that support U2F.</p>
+
+
+  </div>
+
+</article>
 
       </div>
     </div>

@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>I&#39;ve finished school, but I&#39;m still learning.</title>
-  <meta name="description" content="">
+  <title>Playing with: Keybase.io, git, and Jekyll</title>
+  <meta name="description" content="When I recently migrated to Jekyll, I went down the route of storing my blog in git. Since I’ve started to want to blog more often, I needed some way to work...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="https://becoming.wise.st/">
+  <link rel="canonical" href="https://becoming.wise.st/2016/09/29/playing-with-keybaseio-git-jekyll.html">
   <link rel="alternate" type="application/rss+xml" title="I've finished school, but I'm still learning." href="https://becoming.wise.st/feed.xml">
 </head>
 
@@ -54,113 +54,43 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Playing with: Keybase.io, git, and Jekyll</h1>
+    <p class="post-meta"><time datetime="2016-09-29T23:08:00+00:00" itemprop="datePublished">Sep 29, 2016</time></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Nov 9, 2016</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>When I <a href="/2016/05/08/welcome-to-jekyll.html">recently migrated</a> to <a href="https://jekyllrb.com/.">Jekyll</a>, I went down the route of storing my blog in git. Since I’ve started to want to blog more often, I needed some way to work on posts while my main desktop was in use.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/11/09/Voting.html">Personal: Voting</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Nov 5, 2016</span>
+<p>Enter <a href="https://keybase.io/">Keybase.io</a>. They have <a href="https://keybase.io/docs/kbfs">kbfs</a> which provides me plenty of storage (10 GB) for a git repo of my blog. When I first pushed up to the repo, it took probably a few minutes to encrypt, sync, etc. But then I was able to easily clone from my work laptop, and work on another post.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/11/05/Bookshelf-Continuous-Delivery.html">Bookshelf: Continuous Delivery</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 29, 2016</span>
+<p>Steps to set it up on my desktop:</p>
 
-        <h2>
-          <a class="post-link" href="/2016/10/29/Streaks-Building-Habits.html">Streaks: Building Habits</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 23, 2016</span>
+<blockquote>
+  <p>cd repos/becoming.wise.st</p>
 
-        <h2>
-          <a class="post-link" href="/2016/10/23/PuppetConf-2016.html">PuppetConf: 2016 (Upgrading, Community, and Culture)</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 15, 2016</span>
+  <p>git init –bare /keybase/private/becomingwisest/becoming.wise.st.git</p>
 
-        <h2>
-          <a class="post-link" href="/2016/10/15/my-community-hangops.html">My community, hangops</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 8, 2016</span>
+  <p>git remote add origin /keybase/private/becomingwisest/becoming.wise.st.git</p>
 
-        <h2>
-          <a class="post-link" href="/2016/10/08/be-sure-to-leave-a-trail.html">Note: Be sure to leave a trail</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 29, 2016</span>
+  <p>git branch -u origin/master</p>
 
-        <h2>
-          <a class="post-link" href="/2016/09/29/playing-with-keybaseio-git-jekyll.html">Playing with: Keybase.io, git, and Jekyll</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 29, 2016</span>
+  <p>git push origin master</p>
+</blockquote>
 
-        <h2>
-          <a class="post-link" href="/2016/09/29/playing-with-yubikey.html">Playing with: YubiKey4</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 27, 2016</span>
+<p>And on my laptop, its quite easy.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/09/27/blog-to-follow-julia-evans.html">Blog to follow: Julia Evans (@b0rk)</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 8, 2016</span>
+<blockquote>
+  <p>cd repos</p>
 
-        <h2>
-          <a class="post-link" href="/2016/05/08/welcome-to-jekyll.html">Switching to Jekyll!</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Mar 5, 2013</span>
+  <p>git clone /keybase/private/becomingwisest/becoming.wise.st.git</p>
+</blockquote>
 
-        <h2>
-          <a class="post-link" href="/2013/03/05/i-am-a-linux-enthusiast.-thanks-scale.html">I AM A LINUX ENTHUSIAST. Thanks SCaLE.</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Feb 18, 2013</span>
+  </div>
 
-        <h2>
-          <a class="post-link" href="/2013/02/18/blog-to-follow-a-few-thoughts-on-cryptographic-engineering.html">Blog to follow: A Few Thoughts on Cryptographic Engineering</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
-</div>
+</article>
 
       </div>
     </div>
