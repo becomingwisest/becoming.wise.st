@@ -1,0 +1,49 @@
+I"�<p>Back in March, I got a <a href="https://www.yubico.com/products/yubikey-hardware/yubikey4/">Yubikey4</a>. I already had two of the <a href="https://www.yubico.com/products/yubikey-hardware/fido-u2f-security-key/">Github branded U2F devices</a>, but I’ve always enjoyed security and public key crypto. The YubiKey4 supports 4096 bit GPG keys, which should last a while.</p>
+
+<p>I already had <a href="https://gpgtools.org/">GPGTools</a> installed, so now it was a question of how to set it up. With some searching I found <a href="https://www.esev.com/blog/post/2015-01-pgp-ssh-key-on-yubikey-neo/">Eric Severance’s blog post: PGP and SSH keys on a Yubikey NEO</a>, and used that to crib my setup. I kept failing setting it up, or at least accessing the key afeter import. With some searching, I probably found <a href="https://developers.yubico.com/yubico-piv-tool/YubiKey_PIV_introduction.html">YubiKey PIV introduction</a> which provides:</p>
+
+<blockquote>
+  <p>The default PIN code is 123456. The default PUK code is 12345678.
+The default 3DES management key (9B) is 010203040506070801020304050607080102030405060708.</p>
+</blockquote>
+
+<p>After playing around a few times, I settled on using BF2D00BCEC46EA7B for work and personal use. I followed the directions to get my key usable with ssh via the <code class="highlighter-rouge">gpgkey2ssh</code> tool. I added gpg-agent support with my .bash_profile having<code class="highlighter-rouge">[[ -e /Users/christopher.evans/.gnupg/S.gpg-agent.ssh ]] &amp;&amp; export SSH_AUTH_SOCK=/Users/christopher.evans/.gnupg/S.gpg-agent.ssh</code>. I actually don’t remember how I get the gpg agent to start, unless its something part of the GPGTool suite.</p>
+
+<p>One thing that seemed to not work is U2F. I tried adding it to my GitHub account, I tried gmail, I even tried the <a href="https://demo.yubico.com/u2f">demo Yubico</a> has. No joy, time to email support. Since I gave them the guide I used, they quickly pointed out that <code class="highlighter-rouge">ykpersonalize -m82</code> was the right approach for YubiKey NEOs sold before September 2014. But since then U2F support has come out, and <code class="highlighter-rouge">-m86</code> is needed. The <a href="https://developers.yubico.com/yubikey-personalization/Manuals/ykpersonalize.1.html">ykpersonalize</a> man page describes the modes:</p>
+
+<blockquote>
+  <p>-m mode</p>
+
+  <p>set device configuration for the YubiKey. It is parsed in the form mode:cr_timeout:autoeject_timeout</p>
+
+  <p>where mode is:</p>
+
+  <p>0
+OTP device only.</p>
+
+  <p>1
+CCID device only.</p>
+
+  <p>2
+OTP/CCID composite device.</p>
+
+  <p>3
+U2F device only.</p>
+
+  <p>4
+OTP/U2F composite device.</p>
+
+  <p>5
+U2F/CCID composite device.</p>
+
+  <p>6
+OTP/U2F/CCID composite device. Add 80 to set MODE_FLAG_EJECT, for example: 81</p>
+
+  <p>cr_timeout is the timeout in seconds for the YubiKey to wait on button press for challenge response (default is 15)</p>
+
+  <p>autoeject_timeout is the timeout in seconds before the card is automatically ejected in mode 81</p>
+</blockquote>
+
+<p>With that quick fix, I now have a good GPG key, usable with SSH, and my accounts that can use U2F do. Recently Yubico has announced <a href="https://www.yubico.com/2016/09/yubikey-works-windows-hello/">Windows 10 Hello</a> support, <a href="https://www.yubico.com/2016/09/yubikey-smart-card-support-for-macos-sierra-2/">MacOS 10.12 Sierra</a> support, and even has a <a href="https://www.yubico.com/2016/07/over-a-dozen-services-supporting-fido-u2f/">short list of sites</a> that support U2F.</p>
+
+:ET
