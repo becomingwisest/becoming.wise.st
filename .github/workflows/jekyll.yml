@@ -23,6 +23,11 @@ jobs:
       run: find ${{ github.workspace }}/_site
     - name: Git status
       run: git status && git branch && git branch -r
+    - name: Configure Git Author
+      run: |
+        git config user.email "actions@github.com" && \
+        git config user.name "Github Actions"
+
     - name: Copy repo
       run: |
         cp -a ${{ github.workspace }} ${{ github.workspace }}/../gh-pages && \
