@@ -12,6 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: fetch origin gh-pages
+      run: git fetch origin gh-pages:gh-pages
     - name: Build the site in the jekyll/builder container
       run: |
         docker run \
@@ -21,3 +23,11 @@ jobs:
       run: find ${{ github.workspace }}/_site
     - name: Git status
       run: git status && git branch && git branch -r
+    - name: Copy repo
+      run: |
+        cp -a ${{ github.workspace }} ${{ github.workspace }}/../gh-pages && \
+        cd ${{ github.workspace }}/../gh-pages && \
+        git checkout gh-pages && \
+        rsync --progress --delete -a -n ${{ github.workspace }}/_site/ ./ --exclude=.git && \
+        git add . && git commit -m "$(date) $ACTIONS_RUNTIME_URL" && \
+        git push -f
