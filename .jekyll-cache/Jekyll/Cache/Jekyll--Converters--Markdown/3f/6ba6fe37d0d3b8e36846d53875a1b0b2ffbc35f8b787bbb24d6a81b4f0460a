@@ -1,3 +1,0 @@
-I"�<p>Today I got my <a href="https://www.yubico.com/products/yubikey-hardware/yubikey4/">YubiKey 4C Nano</a> to join my ‘new’ work laptop. I figured I should follow up from my earlier post ‘<a href="/2016/09/29/playing-with-yubikey.html">Playing with: YubiKey4</a>’. I quickly added it to <a href="https://myaccount.google.com/u/1/signinoptions/two-step-verification">my Google account</a> and <a href="https://github.com/settings/two_factor_authentication/configure">GitHub</a>
-Back in March, I got a <a href="https://www.yubico.com/products/yubikey-hardware/yubikey4/">Yubikey4</a>. Next was to import my existing GPG key to the card, and make new subkeys.</p>
-:ET
