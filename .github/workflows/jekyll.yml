@@ -35,10 +35,12 @@ jobs:
     - name: rsync _site to gh-pages
       run: rsync --progress --delete -a -n ${{ github.workspace }}/_site/ ${{ github.workspace }}/../gh-pages/ --exclude=.git/
     - name: Git status gh-pages
-      run: git status && git branch && git branch -r && find .
+      run: git status && git branch && git branch -r
       working-directory: ${{ github.workspace }}/../gh-pages
+    - name: find  ${{ github.workspace }}/../gh-pages
+      run: find  ${{ github.workspace }}/../gh-pages | sort
     - name: git add gh-pages
-      run: git add .
+      run: pwd && git add .
       working-directory: ${{ github.workspace }}/../gh-pages
     - name: commit gh-pages
       run: git commit -m "$(date) $ACTIONS_RUNTIME_URL"
