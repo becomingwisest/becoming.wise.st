@@ -34,7 +34,7 @@ jobs:
     - name: checkout gh-pages
       run: git checkout --track origin/gh-pages
     - name: rsync _site to gh-pages
-      run: rsync --progress --delete -a -n ${{ github.workspace }}/_site/ ./ --exclude=.git
+      run: rsync --progress --delete -a -n ${{ github.workspace }}/_site/_site/ ./ --exclude=.git
     - name: git add gh-pages
       run: git add .
     - name: commit gh-pages
