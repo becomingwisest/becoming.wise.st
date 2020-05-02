@@ -29,15 +29,18 @@ jobs:
         git config user.name "Github Actions"
     - name: Copy repo
       run: cp -a ${{ github.workspace }} ${{ github.workspace }}/../gh-pages
-    - name: cd gh-pages
-      run: cd ${{ github.workspace }}/../gh-pages
-    - name: checkout gh-pages
+    - name: checkout gh-pages, sync and push
       run: git checkout --track origin/gh-pages
+      working-directory: ${{ github.workspace }}/../gh-pages
     - name: rsync _site to gh-pages
       run: rsync --progress --delete -a -n ${{ github.workspace }}/_site/ ./ --exclude=.git/
+      working-directory: ${{ github.workspace }}/../gh-pages
     - name: git add gh-pages
       run: git add .
+      working-directory: ${{ github.workspace }}/../gh-pages
     - name: commit gh-pages
       run: git commit -m "$(date) $ACTIONS_RUNTIME_URL"
+      working-directory: ${{ github.workspace }}/../gh-pages
     - name: push gh-pages
       run: git push
+      working-directory: ${{ github.workspace }}/../gh-pages
