@@ -35,6 +35,9 @@ jobs:
     - name: rsync _site to gh-pages
       run: rsync --progress --delete -a -n ${{ github.workspace }}/_site/ ./ --exclude=.git/
       working-directory: ${{ github.workspace }}/../gh-pages
+    - name: Git status gh-pages
+      run: git status && git branch && git branch -r && find .
+      working-directory: ${{ github.workspace }}/../gh-pages
     - name: git add gh-pages
       run: git add .
       working-directory: ${{ github.workspace }}/../gh-pages
