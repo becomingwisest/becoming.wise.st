@@ -33,7 +33,7 @@ jobs:
       run: git checkout --track origin/gh-pages
       working-directory: ${{ github.workspace }}/../gh-pages
     - name: rsync _site to gh-pages
-      run: rsync --progress --delete -a -n ${{ github.workspace }}/_site/ ${{ github.workspace }}/../gh-pages/ --exclude=.git/
+      run: rsync --progress --delete -a ${{ github.workspace }}/_site/ ${{ github.workspace }}/../gh-pages/ --exclude=.git/
     - name: Git status gh-pages
       run: git status && git branch && git branch -r
       working-directory: ${{ github.workspace }}/../gh-pages
