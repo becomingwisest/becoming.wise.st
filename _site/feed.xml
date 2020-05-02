@@ -5,9 +5,115 @@
     <description></description>
     <link>https://becoming.wise.st/</link>
     <atom:link href="https://becoming.wise.st/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 22 Apr 2020 15:15:21 -0500</pubDate>
-    <lastBuildDate>Wed, 22 Apr 2020 15:15:21 -0500</lastBuildDate>
+    <pubDate>Sat, 02 May 2020 12:55:10 -0500</pubDate>
+    <lastBuildDate>Sat, 02 May 2020 12:55:10 -0500</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
+    
+      <item>
+        <title>Keeping track of books</title>
+        <description>&lt;p&gt;I’ve been reading a bit more lately, and thought I’d keep track of books. Some that I’ve read.
+Some that I intend to read. Some that I might read some day.&lt;/p&gt;
+
+&lt;p&gt;Katie Womersley,
+Juan Pablo Buriticá:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.holloway.com/g/remote-work/about&quot;&gt;The Holloway Guide to
+Remote Work&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Camille Fournier:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The Manager’s Path: A Guide for Tech Leaders Navigating Growth and Change&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Thomas A. Limoncelli:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The Practice of System and Network Administration: Volume 1: DevOps and other Best Practices for Enterprise IT&lt;/li&gt;
+  &lt;li&gt;The Practice of Cloud System Administration: DevOps and SRE Practices for Web Services, Volume 2&lt;/li&gt;
+  &lt;li&gt;Time Management for System Administrators: Stop Working Late and Start Working Smart&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Stephen R. Covey:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The 7 Habits of Highly Effective People: Powerful Lessons in Personal Change&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Charles Duhigg:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The Power of Habit: Why We Do What We Do in Life and Business&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Nicole Forsgren,
+Jez Humble,
+Gene Kim:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Eliyahu M. Goldratt:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The Goal: A Process of Ongoing Improvement&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Dominica DeGrandis:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Making Work Visible: Exposing Time Theft to Optimize Work &amp;amp; Flow&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Susan Cain:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Quiet: The Power of Introverts in a World That Can’t Stop Talking&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Robert C. Martin:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Clean Code: A Handbook of Agile Software Craftsmanship&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Cal Newport:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Deep Work: Rules for Focused Success in a Distracted World&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Michael Watkins:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The First 90 Days, Updated and Expanded: Proven Strategies for Getting Up to Speed Faster and Smarter&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Jennifer B. Kahnweiler:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The Genius of Opposites: How Introverts and Extroverts Achieve Extraordinary Results Together&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Gene Kim:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The Phoenix Project: A Novel about IT, DevOps, and Helping Your Business Win&lt;/li&gt;
+  &lt;li&gt;The Unicorn Project: A Novel about Developers, Digital Disruption, and Thriving in the Age of Data&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Gene Kim,
+Jez Humble,
+John Willis:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The DevOps Handbook: How to Create World-Class Agility, Reliability, and Security in Technology Organizations&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Scott Chacon:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Pro Git&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Pamela J Hinds:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Distributed Work (The MIT Press)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sat, 02 May 2020 12:00:00 -0500</pubDate>
+        <link>https://becoming.wise.st/2020/05/02/keeping-track-of-books.html</link>
+        <guid isPermaLink="true">https://becoming.wise.st/2020/05/02/keeping-track-of-books.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Playing with: YubiKey 4C Nano</title>
