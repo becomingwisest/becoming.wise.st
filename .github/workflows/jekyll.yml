@@ -29,12 +29,11 @@ jobs:
         git config user.name "Github Actions"
     - name: Copy repo
       run: cp -a ${{ github.workspace }} ${{ github.workspace }}/../gh-pages
-    - name: checkout gh-pages, sync and push
+    - name: checkout gh-pages
       run: git checkout --track origin/gh-pages
       working-directory: ${{ github.workspace }}/../gh-pages
     - name: rsync _site to gh-pages
-      run: rsync --progress --delete -a -n ${{ github.workspace }}/_site/ ./ --exclude=.git/
-      working-directory: ${{ github.workspace }}/../gh-pages
+      run: rsync --progress --delete -a -n ${{ github.workspace }}/_site/ ${{ github.workspace }}/../gh-pages/ --exclude=.git/
     - name: Git status gh-pages
       run: git status && git branch && git branch -r && find .
       working-directory: ${{ github.workspace }}/../gh-pages
