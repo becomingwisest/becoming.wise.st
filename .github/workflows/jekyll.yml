@@ -19,10 +19,6 @@ jobs:
         docker run \
         -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
         jekyll/builder:latest /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
-    - name: What files exist
-      run: find ${{ github.workspace }}/_site
-    - name: Git status
-      run: git status && git branch && git branch -r
     - name: Configure Git Author
       run: |
         git config user.email "actions@github.com" && \
@@ -34,13 +30,8 @@ jobs:
       working-directory: ${{ github.workspace }}/../gh-pages
     - name: rsync _site to gh-pages
       run: rsync --progress --delete -a ${{ github.workspace }}/_site/ ${{ github.workspace }}/../gh-pages/ --exclude=.git/
-    - name: Git status gh-pages
-      run: git status && git branch && git branch -r
-      working-directory: ${{ github.workspace }}/../gh-pages
-    - name: find  ${{ github.workspace }}/../gh-pages
-      run: find  ${{ github.workspace }}/../gh-pages | sort
     - name: git add gh-pages
-      run: pwd && git add .
+      run: git add .
       working-directory: ${{ github.workspace }}/../gh-pages
     - name: commit gh-pages
       run: git commit -m "$(date) $ACTIONS_RUNTIME_URL"
