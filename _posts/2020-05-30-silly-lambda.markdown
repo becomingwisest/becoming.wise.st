@@ -6,7 +6,7 @@ date:   2020-05-30 13:50:00 -0700
 
 I decided to have some fun with lambda today. Something to do 99 root beers.
 
-```python
+```
 import json
 import boto3
 
@@ -35,7 +35,7 @@ def lambda_handler(event, context):
 ```
 
 Lets test this out. It seems I need to specify an outfile, so `-` for standard output. [aws cli docs](https://docs.aws.amazon.com/cli/latest/reference/lambda/invoke.html)
-```console
+```
 root@196c6175b6bc:/repos/aws-auto# aws lambda invoke --function-name 'rootbeerpy' --payload '{"rootbeers":99}'
 usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
 To see help text, you can run:
@@ -54,7 +54,7 @@ root@196c6175b6bc:/repos/aws-auto#
 
 I'm going to cheat, and lookup the log stream I need from [my aws console](https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#logsV2:log-groups/log-group/$252Faws$252Flambda$252Frootbeerpy)
 
-```console
+```
 root@196c6175b6bc:/repos/aws-auto# aws logs get-log-events --log-group-name /aws/lambda/rootbeerpy --log-stream-name '2020/05/30/[$LATEST]82b35faf79cf4dd6827e20d857334a76'
 {
     "events": [
