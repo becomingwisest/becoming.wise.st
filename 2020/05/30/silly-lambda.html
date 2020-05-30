@@ -72,22 +72,22 @@ def lambda_handler(event, context):
     client = boto3.client('lambda')
     count = event['rootbeers']
 
-    if not count:
+    if count &gt; 0:
         if count &gt; 1:
             bottles = '{} bottles of rootbeer.'
         else:
             bottles = '{} bottle of rootbeer.'
         print(bottles.format(count))
         response = client.invoke_async(
-            FunctionName='arn:aws:lambda:us-west-2:304187357154:function:rootbeerpy',
-            InvokeArgs=json.dumps({'rootbeers': 0})
+            FunctionName='rootbeerpy',
+            InvokeArgs=json.dumps({'rootbeers': count-1})
         )
     else:
         print("All gone.")
 
     return {
         'statusCode': 200,
-        'body': json.dumps(event)
+        'body': json.dumps(count)
     }
 </code></pre></div></div>
 

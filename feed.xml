@@ -5,8 +5,8 @@
     <description></description>
     <link>https://becoming.wise.st/</link>
     <atom:link href="https://becoming.wise.st/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 30 May 2020 17:03:10 -0500</pubDate>
-    <lastBuildDate>Sat, 30 May 2020 17:03:10 -0500</lastBuildDate>
+    <pubDate>Sat, 30 May 2020 17:06:26 -0500</pubDate>
+    <lastBuildDate>Sat, 30 May 2020 17:06:26 -0500</lastBuildDate>
     <generator>Jekyll v4.1.0</generator>
     
       <item>
@@ -21,22 +21,22 @@ def lambda_handler(event, context):
     client = boto3.client('lambda')
     count = event['rootbeers']
 
-    if not count:
+    if count &amp;gt; 0:
         if count &amp;gt; 1:
             bottles = '{} bottles of rootbeer.'
         else:
             bottles = '{} bottle of rootbeer.'
         print(bottles.format(count))
         response = client.invoke_async(
-            FunctionName='arn:aws:lambda:us-west-2:304187357154:function:rootbeerpy',
-            InvokeArgs=json.dumps({'rootbeers': 0})
+            FunctionName='rootbeerpy',
+            InvokeArgs=json.dumps({'rootbeers': count-1})
         )
     else:
         print(&quot;All gone.&quot;)
 
     return {
         'statusCode': 200,
-        'body': json.dumps(event)
+        'body': json.dumps(count)
     }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
