@@ -1,0 +1,1346 @@
+---
+layout: post
+title:  "Silly Lambda"
+date:   2020-05-30 13:50:00 -0700
+---
+
+I decided to have some fun with lambda today. Something to do 99 root beers.
+
+```python
+import json
+import boto3
+
+def lambda_handler(event, context):
+    # TODO implement
+    client = boto3.client('lambda')
+    count = event['rootbeers']
+
+    if not count:
+        if count > 1:
+            bottles = '{} bottles of rootbeer.'
+        else:
+            bottles = '{} bottle of rootbeer.'
+        print(bottles.format(count))
+        response = client.invoke_async(
+            FunctionName='arn:aws:lambda:us-west-2:304187357154:function:rootbeerpy',
+            InvokeArgs=json.dumps({'rootbeers': 0})
+        )
+    else:
+        print("All gone.")
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps(event)
+    }
+```
+
+Lets test this out. It seems I need to specify an outfile, so `-` for standard output. [aws cli docs](https://docs.aws.amazon.com/cli/latest/reference/lambda/invoke.html)
+```console
+root@196c6175b6bc:/repos/aws-auto# aws lambda invoke --function-name 'rootbeerpy' --payload '{"rootbeers":99}'
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: the following arguments are required: outfile
+root@196c6175b6bc:/repos/aws-auto# aws lambda invoke --function-name 'rootbeerpy' --payload '{"rootbeers":99}' -
+{
+    "StatusCode": 200,
+    "ExecutedVersion": "$LATEST"
+}
+root@196c6175b6bc:/repos/aws-auto#
+```
+
+I'm going to cheat, and lookup the log stream I need from [my aws console](https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#logsV2:log-groups/log-group/$252Faws$252Flambda$252Frootbeerpy)
+
+```console
+root@196c6175b6bc:/repos/aws-auto# aws logs get-log-events --log-group-name /aws/lambda/rootbeerpy --log-stream-name '2020/05/30/[$LATEST]82b35faf79cf4dd6827e20d857334a76'
+{
+    "events": [
+        {
+            "timestamp": 1590873394912,
+            "message": "START RequestId: e9f15174-0b16-4fa8-ae84-717378d37cac Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873395570,
+            "message": "81 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873395829,
+            "message": "END RequestId: e9f15174-0b16-4fa8-ae84-717378d37cac\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873395829,
+            "message": "REPORT RequestId: e9f15174-0b16-4fa8-ae84-717378d37cac\tDuration: 915.66 ms\tBilled Duration: 1000 ms\tMemory Size: 128 MB\tMax Memory Used: 71 MB\tInit Duration: 261.56 ms\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873395842,
+            "message": "START RequestId: 34ea60f3-8ec0-4d45-af3c-bc06990b737f Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873395848,
+            "message": "80 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396070,
+            "message": "END RequestId: 34ea60f3-8ec0-4d45-af3c-bc06990b737f\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396070,
+            "message": "REPORT RequestId: 34ea60f3-8ec0-4d45-af3c-bc06990b737f\tDuration: 225.71 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 71 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396088,
+            "message": "START RequestId: d918afe9-421d-43fa-bb7f-480844aee04c Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396111,
+            "message": "79 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396261,
+            "message": "END RequestId: d918afe9-421d-43fa-bb7f-480844aee04c\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396261,
+            "message": "REPORT RequestId: d918afe9-421d-43fa-bb7f-480844aee04c\tDuration: 170.64 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 71 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396297,
+            "message": "START RequestId: 79b0d264-ae7c-4c7b-94a2-05fb8431ab47 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396311,
+            "message": "78 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396510,
+            "message": "END RequestId: 79b0d264-ae7c-4c7b-94a2-05fb8431ab47\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873396510,
+            "message": "REPORT RequestId: 79b0d264-ae7c-4c7b-94a2-05fb8431ab47\tDuration: 210.71 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 71 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397160,
+            "message": "START RequestId: 4a2d37e0-d849-4039-b086-3467bdcf25e2 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397170,
+            "message": "74 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397411,
+            "message": "END RequestId: 4a2d37e0-d849-4039-b086-3467bdcf25e2\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397411,
+            "message": "REPORT RequestId: 4a2d37e0-d849-4039-b086-3467bdcf25e2\tDuration: 248.88 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 71 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397435,
+            "message": "START RequestId: 7a6514b9-90c5-450c-a6fc-90517402de93 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397441,
+            "message": "73 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397690,
+            "message": "END RequestId: 7a6514b9-90c5-450c-a6fc-90517402de93\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397690,
+            "message": "REPORT RequestId: 7a6514b9-90c5-450c-a6fc-90517402de93\tDuration: 252.06 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 71 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397727,
+            "message": "START RequestId: 40c4357c-d21f-4b6e-a9ad-db059a3f1f16 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397750,
+            "message": "72 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397950,
+            "message": "END RequestId: 40c4357c-d21f-4b6e-a9ad-db059a3f1f16\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397950,
+            "message": "REPORT RequestId: 40c4357c-d21f-4b6e-a9ad-db059a3f1f16\tDuration: 219.23 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 71 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397975,
+            "message": "START RequestId: 9e983a38-e152-4685-a059-381a04db1e4a Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873397980,
+            "message": "71 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398170,
+            "message": "END RequestId: 9e983a38-e152-4685-a059-381a04db1e4a\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398170,
+            "message": "REPORT RequestId: 9e983a38-e152-4685-a059-381a04db1e4a\tDuration: 193.29 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398179,
+            "message": "START RequestId: dcc70db8-d273-495b-af7d-20a3d305f9ba Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398184,
+            "message": "70 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398370,
+            "message": "END RequestId: dcc70db8-d273-495b-af7d-20a3d305f9ba\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398370,
+            "message": "REPORT RequestId: dcc70db8-d273-495b-af7d-20a3d305f9ba\tDuration: 188.74 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398398,
+            "message": "START RequestId: 695127f1-cc3d-499b-bf98-a51e7fcc877e Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398404,
+            "message": "69 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398610,
+            "message": "END RequestId: 695127f1-cc3d-499b-bf98-a51e7fcc877e\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398610,
+            "message": "REPORT RequestId: 695127f1-cc3d-499b-bf98-a51e7fcc877e\tDuration: 209.64 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398636,
+            "message": "START RequestId: 48197b2f-d996-4a4b-b7a7-19498d0f869e Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398670,
+            "message": "68 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398831,
+            "message": "END RequestId: 48197b2f-d996-4a4b-b7a7-19498d0f869e\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398831,
+            "message": "REPORT RequestId: 48197b2f-d996-4a4b-b7a7-19498d0f869e\tDuration: 192.91 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398853,
+            "message": "START RequestId: 8db921dc-71cc-47e2-90de-91e4b2314661 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873398871,
+            "message": "67 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399050,
+            "message": "END RequestId: 8db921dc-71cc-47e2-90de-91e4b2314661\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399050,
+            "message": "REPORT RequestId: 8db921dc-71cc-47e2-90de-91e4b2314661\tDuration: 195.89 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399068,
+            "message": "START RequestId: ea52b9a3-d159-4472-bbc1-52122e785097 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399091,
+            "message": "66 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399285,
+            "message": "END RequestId: ea52b9a3-d159-4472-bbc1-52122e785097\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399285,
+            "message": "REPORT RequestId: ea52b9a3-d159-4472-bbc1-52122e785097\tDuration: 213.92 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399313,
+            "message": "START RequestId: 5d80b00d-0a7e-47a2-b937-eff384ab3898 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399320,
+            "message": "65 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399550,
+            "message": "END RequestId: 5d80b00d-0a7e-47a2-b937-eff384ab3898\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399550,
+            "message": "REPORT RequestId: 5d80b00d-0a7e-47a2-b937-eff384ab3898\tDuration: 233.35 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399572,
+            "message": "START RequestId: ae8a4daf-8df5-4aa1-8bb2-bad0af4343da Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399590,
+            "message": "64 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399743,
+            "message": "END RequestId: ae8a4daf-8df5-4aa1-8bb2-bad0af4343da\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399743,
+            "message": "REPORT RequestId: ae8a4daf-8df5-4aa1-8bb2-bad0af4343da\tDuration: 168.95 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399787,
+            "message": "START RequestId: 3df4e6e3-e791-45fa-be04-bbf99211337f Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399809,
+            "message": "63 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399971,
+            "message": "END RequestId: 3df4e6e3-e791-45fa-be04-bbf99211337f\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399971,
+            "message": "REPORT RequestId: 3df4e6e3-e791-45fa-be04-bbf99211337f\tDuration: 181.59 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873399989,
+            "message": "START RequestId: abf5c034-35a0-4a75-a20d-9a60269c93da Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400010,
+            "message": "62 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400290,
+            "message": "END RequestId: abf5c034-35a0-4a75-a20d-9a60269c93da\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400290,
+            "message": "REPORT RequestId: abf5c034-35a0-4a75-a20d-9a60269c93da\tDuration: 299.46 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400312,
+            "message": "START RequestId: e2eb1bdb-4bbf-499a-8f9e-98d6776883b7 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400319,
+            "message": "61 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400510,
+            "message": "END RequestId: e2eb1bdb-4bbf-499a-8f9e-98d6776883b7\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400510,
+            "message": "REPORT RequestId: e2eb1bdb-4bbf-499a-8f9e-98d6776883b7\tDuration: 194.56 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400523,
+            "message": "START RequestId: dafd2d2c-8970-4948-b286-187492d85d8a Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400529,
+            "message": "60 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400811,
+            "message": "END RequestId: dafd2d2c-8970-4948-b286-187492d85d8a\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400811,
+            "message": "REPORT RequestId: dafd2d2c-8970-4948-b286-187492d85d8a\tDuration: 285.56 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400827,
+            "message": "START RequestId: cd581e97-e14b-4eb4-abbe-4af9228492dd Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873400850,
+            "message": "59 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401050,
+            "message": "END RequestId: cd581e97-e14b-4eb4-abbe-4af9228492dd\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401050,
+            "message": "REPORT RequestId: cd581e97-e14b-4eb4-abbe-4af9228492dd\tDuration: 219.29 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401070,
+            "message": "START RequestId: a8afd43f-d815-462e-ac47-5452039b6ddc Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401075,
+            "message": "58 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401250,
+            "message": "END RequestId: a8afd43f-d815-462e-ac47-5452039b6ddc\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401250,
+            "message": "REPORT RequestId: a8afd43f-d815-462e-ac47-5452039b6ddc\tDuration: 177.93 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 72 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401266,
+            "message": "START RequestId: 44142381-44df-4b0d-a312-07d03545504a Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401273,
+            "message": "57 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401440,
+            "message": "END RequestId: 44142381-44df-4b0d-a312-07d03545504a\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401440,
+            "message": "REPORT RequestId: 44142381-44df-4b0d-a312-07d03545504a\tDuration: 171.60 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401492,
+            "message": "START RequestId: 6fca6449-b61a-480a-a374-be7d9e6da92e Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401511,
+            "message": "56 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401771,
+            "message": "END RequestId: 6fca6449-b61a-480a-a374-be7d9e6da92e\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401771,
+            "message": "REPORT RequestId: 6fca6449-b61a-480a-a374-be7d9e6da92e\tDuration: 276.93 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401792,
+            "message": "START RequestId: 14c6611b-6259-4964-8122-b820bd5a9e07 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401810,
+            "message": "55 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401990,
+            "message": "END RequestId: 14c6611b-6259-4964-8122-b820bd5a9e07\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873401990,
+            "message": "REPORT RequestId: 14c6611b-6259-4964-8122-b820bd5a9e07\tDuration: 195.40 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402394,
+            "message": "START RequestId: 3919c4f3-377f-42da-97a7-2fdc7d269683 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402400,
+            "message": "52 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402570,
+            "message": "END RequestId: 3919c4f3-377f-42da-97a7-2fdc7d269683\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402570,
+            "message": "REPORT RequestId: 3919c4f3-377f-42da-97a7-2fdc7d269683\tDuration: 173.38 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402604,
+            "message": "START RequestId: 3977e93b-f4fa-4cc5-b418-ce7d7f982ffb Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402613,
+            "message": "51 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402850,
+            "message": "END RequestId: 3977e93b-f4fa-4cc5-b418-ce7d7f982ffb\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402850,
+            "message": "REPORT RequestId: 3977e93b-f4fa-4cc5-b418-ce7d7f982ffb\tDuration: 241.25 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402878,
+            "message": "START RequestId: cf0a7170-09e6-4b73-af6a-d3add4777ec2 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873402885,
+            "message": "50 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403070,
+            "message": "END RequestId: cf0a7170-09e6-4b73-af6a-d3add4777ec2\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403070,
+            "message": "REPORT RequestId: cf0a7170-09e6-4b73-af6a-d3add4777ec2\tDuration: 188.85 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403263,
+            "message": "START RequestId: 870c0d1d-729c-49e0-994d-89151aaae49d Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403268,
+            "message": "48 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403430,
+            "message": "END RequestId: 870c0d1d-729c-49e0-994d-89151aaae49d\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403430,
+            "message": "REPORT RequestId: 870c0d1d-729c-49e0-994d-89151aaae49d\tDuration: 165.10 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403453,
+            "message": "START RequestId: 7d644f3f-e458-4291-8f68-d319ce95454c Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403459,
+            "message": "47 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403638,
+            "message": "END RequestId: 7d644f3f-e458-4291-8f68-d319ce95454c\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403638,
+            "message": "REPORT RequestId: 7d644f3f-e458-4291-8f68-d319ce95454c\tDuration: 182.02 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403665,
+            "message": "START RequestId: 9f0a94cc-0199-4032-9ca5-4f40a19d21a5 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403690,
+            "message": "46 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403870,
+            "message": "END RequestId: 9f0a94cc-0199-4032-9ca5-4f40a19d21a5\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403870,
+            "message": "REPORT RequestId: 9f0a94cc-0199-4032-9ca5-4f40a19d21a5\tDuration: 203.19 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403897,
+            "message": "START RequestId: 73679a0a-6251-4993-8a29-d4bd8dec1c73 Version: $LATEST\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873403903,
+            "message": "45 bottles of rootbeer.\n",
+            "ingestionTime": 1590873403926
+        },
+        {
+            "timestamp": 1590873404091,
+            "message": "END RequestId: 73679a0a-6251-4993-8a29-d4bd8dec1c73\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404091,
+            "message": "REPORT RequestId: 73679a0a-6251-4993-8a29-d4bd8dec1c73\tDuration: 191.20 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404102,
+            "message": "START RequestId: 2b8ab121-9923-4a32-9896-d277cb51627d Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404112,
+            "message": "44 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404309,
+            "message": "END RequestId: 2b8ab121-9923-4a32-9896-d277cb51627d\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404309,
+            "message": "REPORT RequestId: 2b8ab121-9923-4a32-9896-d277cb51627d\tDuration: 206.02 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404331,
+            "message": "START RequestId: d27b13a1-c5e1-43d3-b867-b9b0c4cd67c8 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404336,
+            "message": "43 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404530,
+            "message": "END RequestId: d27b13a1-c5e1-43d3-b867-b9b0c4cd67c8\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404530,
+            "message": "REPORT RequestId: d27b13a1-c5e1-43d3-b867-b9b0c4cd67c8\tDuration: 197.09 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404533,
+            "message": "START RequestId: db93dd5e-ee3a-4e7a-91bd-5928df47bb00 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404571,
+            "message": "42 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404750,
+            "message": "END RequestId: db93dd5e-ee3a-4e7a-91bd-5928df47bb00\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404750,
+            "message": "REPORT RequestId: db93dd5e-ee3a-4e7a-91bd-5928df47bb00\tDuration: 215.41 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404762,
+            "message": "START RequestId: 509bad05-c6d6-4e35-92d6-869466a49fe2 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404772,
+            "message": "41 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404956,
+            "message": "END RequestId: 509bad05-c6d6-4e35-92d6-869466a49fe2\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404956,
+            "message": "REPORT RequestId: 509bad05-c6d6-4e35-92d6-869466a49fe2\tDuration: 191.45 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404987,
+            "message": "START RequestId: f2ac9602-49d5-4aa2-95bf-b239ec84a2a3 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873404993,
+            "message": "40 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405170,
+            "message": "END RequestId: f2ac9602-49d5-4aa2-95bf-b239ec84a2a3\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405170,
+            "message": "REPORT RequestId: f2ac9602-49d5-4aa2-95bf-b239ec84a2a3\tDuration: 180.20 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405195,
+            "message": "START RequestId: 7663e016-565c-48f1-bbd4-394ba450bd34 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405200,
+            "message": "39 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405370,
+            "message": "END RequestId: 7663e016-565c-48f1-bbd4-394ba450bd34\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405370,
+            "message": "REPORT RequestId: 7663e016-565c-48f1-bbd4-394ba450bd34\tDuration: 173.37 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405394,
+            "message": "START RequestId: 811ee8e9-f86c-4861-b9a1-9d9bf8ae40a0 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405400,
+            "message": "38 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405570,
+            "message": "END RequestId: 811ee8e9-f86c-4861-b9a1-9d9bf8ae40a0\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405570,
+            "message": "REPORT RequestId: 811ee8e9-f86c-4861-b9a1-9d9bf8ae40a0\tDuration: 173.62 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405592,
+            "message": "START RequestId: 3d8669eb-961f-4c28-9b18-5d68e337f520 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405611,
+            "message": "37 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405790,
+            "message": "END RequestId: 3d8669eb-961f-4c28-9b18-5d68e337f520\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405790,
+            "message": "REPORT RequestId: 3d8669eb-961f-4c28-9b18-5d68e337f520\tDuration: 194.78 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405794,
+            "message": "START RequestId: 965541c9-cc3e-41be-8d4e-588c59d71398 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873405800,
+            "message": "36 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406010,
+            "message": "END RequestId: 965541c9-cc3e-41be-8d4e-588c59d71398\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406010,
+            "message": "REPORT RequestId: 965541c9-cc3e-41be-8d4e-588c59d71398\tDuration: 213.12 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406202,
+            "message": "START RequestId: b2fcd762-68a3-4d29-a729-aeec60222e48 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406208,
+            "message": "34 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406390,
+            "message": "END RequestId: b2fcd762-68a3-4d29-a729-aeec60222e48\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406390,
+            "message": "REPORT RequestId: b2fcd762-68a3-4d29-a729-aeec60222e48\tDuration: 184.78 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406409,
+            "message": "START RequestId: 6f23b8f2-db18-461b-a250-8741a782f65e Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406431,
+            "message": "33 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406610,
+            "message": "END RequestId: 6f23b8f2-db18-461b-a250-8741a782f65e\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406610,
+            "message": "REPORT RequestId: 6f23b8f2-db18-461b-a250-8741a782f65e\tDuration: 199.38 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406632,
+            "message": "START RequestId: e7d7561b-76a3-4485-baf7-7859e1ac2e30 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406640,
+            "message": "32 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406871,
+            "message": "END RequestId: e7d7561b-76a3-4485-baf7-7859e1ac2e30\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406871,
+            "message": "REPORT RequestId: e7d7561b-76a3-4485-baf7-7859e1ac2e30\tDuration: 234.48 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406885,
+            "message": "START RequestId: b9941a1e-2ac0-43f8-8970-294439b13377 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873406929,
+            "message": "31 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873407090,
+            "message": "END RequestId: b9941a1e-2ac0-43f8-8970-294439b13377\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873407090,
+            "message": "REPORT RequestId: b9941a1e-2ac0-43f8-8970-294439b13377\tDuration: 201.16 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 73 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873407111,
+            "message": "START RequestId: f3e8b5cf-ddf8-43f2-a127-64b9ca7ba393 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873407130,
+            "message": "30 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873407330,
+            "message": "END RequestId: f3e8b5cf-ddf8-43f2-a127-64b9ca7ba393\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873407330,
+            "message": "REPORT RequestId: f3e8b5cf-ddf8-43f2-a127-64b9ca7ba393\tDuration: 215.29 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873409481,
+            "message": "START RequestId: 4195c260-d428-40e1-9d48-0a9fb8138455 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873409651,
+            "message": "19 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873409830,
+            "message": "END RequestId: 4195c260-d428-40e1-9d48-0a9fb8138455\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873409830,
+            "message": "REPORT RequestId: 4195c260-d428-40e1-9d48-0a9fb8138455\tDuration: 347.04 ms\tBilled Duration: 400 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873409839,
+            "message": "START RequestId: 8119f61f-d134-4276-ac70-a7e7e22667a0 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873409852,
+            "message": "18 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410110,
+            "message": "END RequestId: 8119f61f-d134-4276-ac70-a7e7e22667a0\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410110,
+            "message": "REPORT RequestId: 8119f61f-d134-4276-ac70-a7e7e22667a0\tDuration: 269.42 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410125,
+            "message": "START RequestId: 186aaaa1-f8b4-403b-b4d7-e342b0450f33 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410131,
+            "message": "17 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410330,
+            "message": "END RequestId: 186aaaa1-f8b4-403b-b4d7-e342b0450f33\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410330,
+            "message": "REPORT RequestId: 186aaaa1-f8b4-403b-b4d7-e342b0450f33\tDuration: 202.37 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410355,
+            "message": "START RequestId: 83d323fb-a102-4d36-bf68-bc39bd1047c8 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410360,
+            "message": "16 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410550,
+            "message": "END RequestId: 83d323fb-a102-4d36-bf68-bc39bd1047c8\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410550,
+            "message": "REPORT RequestId: 83d323fb-a102-4d36-bf68-bc39bd1047c8\tDuration: 192.61 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410552,
+            "message": "START RequestId: 0b7b6c31-0565-4a7a-af53-2b2a25c1a057 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410571,
+            "message": "15 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410739,
+            "message": "END RequestId: 0b7b6c31-0565-4a7a-af53-2b2a25c1a057\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410739,
+            "message": "REPORT RequestId: 0b7b6c31-0565-4a7a-af53-2b2a25c1a057\tDuration: 183.97 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410767,
+            "message": "START RequestId: 7018fc70-f062-4f67-b603-b765a544632e Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410773,
+            "message": "14 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410970,
+            "message": "END RequestId: 7018fc70-f062-4f67-b603-b765a544632e\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873410970,
+            "message": "REPORT RequestId: 7018fc70-f062-4f67-b603-b765a544632e\tDuration: 200.49 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411005,
+            "message": "START RequestId: a48960c9-823f-4192-ad70-4e4adee578a6 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411031,
+            "message": "13 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411210,
+            "message": "END RequestId: a48960c9-823f-4192-ad70-4e4adee578a6\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411210,
+            "message": "REPORT RequestId: a48960c9-823f-4192-ad70-4e4adee578a6\tDuration: 202.45 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411215,
+            "message": "START RequestId: a6f24692-c9d1-4984-acf0-808352f52958 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411220,
+            "message": "12 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411410,
+            "message": "END RequestId: a6f24692-c9d1-4984-acf0-808352f52958\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411410,
+            "message": "REPORT RequestId: a6f24692-c9d1-4984-acf0-808352f52958\tDuration: 193.04 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411421,
+            "message": "START RequestId: 4a19161e-0395-4af8-a122-57b77d234a5a Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411432,
+            "message": "11 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411630,
+            "message": "END RequestId: 4a19161e-0395-4af8-a122-57b77d234a5a\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411630,
+            "message": "REPORT RequestId: 4a19161e-0395-4af8-a122-57b77d234a5a\tDuration: 207.53 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411652,
+            "message": "START RequestId: fb6a5353-5087-4195-a6c6-4e7904fd86f8 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411658,
+            "message": "10 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411830,
+            "message": "END RequestId: fb6a5353-5087-4195-a6c6-4e7904fd86f8\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411830,
+            "message": "REPORT RequestId: fb6a5353-5087-4195-a6c6-4e7904fd86f8\tDuration: 175.17 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411852,
+            "message": "START RequestId: bd357b19-1630-4888-927a-f761ddf2c331 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873411870,
+            "message": "9 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412050,
+            "message": "END RequestId: bd357b19-1630-4888-927a-f761ddf2c331\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412050,
+            "message": "REPORT RequestId: bd357b19-1630-4888-927a-f761ddf2c331\tDuration: 195.14 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412078,
+            "message": "START RequestId: ea655a4e-67e1-426b-8ad6-c371f021967e Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412084,
+            "message": "8 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412270,
+            "message": "END RequestId: ea655a4e-67e1-426b-8ad6-c371f021967e\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412270,
+            "message": "REPORT RequestId: ea655a4e-67e1-426b-8ad6-c371f021967e\tDuration: 189.99 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412278,
+            "message": "START RequestId: 730fa0d1-1f41-4d09-b282-122ff6c4faa2 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412284,
+            "message": "7 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412465,
+            "message": "END RequestId: 730fa0d1-1f41-4d09-b282-122ff6c4faa2\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412465,
+            "message": "REPORT RequestId: 730fa0d1-1f41-4d09-b282-122ff6c4faa2\tDuration: 184.33 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412496,
+            "message": "START RequestId: a2d6f527-5ed6-4ef6-ba01-59d80032b746 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412529,
+            "message": "6 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412710,
+            "message": "END RequestId: a2d6f527-5ed6-4ef6-ba01-59d80032b746\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412710,
+            "message": "REPORT RequestId: a2d6f527-5ed6-4ef6-ba01-59d80032b746\tDuration: 212.08 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412910,
+            "message": "START RequestId: 3032c6b7-7d21-4dd5-8000-619f7107a489 Version: $LATEST\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873412916,
+            "message": "4 bottles of rootbeer.\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873413091,
+            "message": "END RequestId: 3032c6b7-7d21-4dd5-8000-619f7107a489\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873413091,
+            "message": "REPORT RequestId: 3032c6b7-7d21-4dd5-8000-619f7107a489\tDuration: 178.19 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873413107
+        },
+        {
+            "timestamp": 1590873413096,
+            "message": "START RequestId: 41e8e025-ad41-45a4-8518-6777f0164269 Version: $LATEST\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413150,
+            "message": "3 bottles of rootbeer.\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413310,
+            "message": "END RequestId: 41e8e025-ad41-45a4-8518-6777f0164269\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413310,
+            "message": "REPORT RequestId: 41e8e025-ad41-45a4-8518-6777f0164269\tDuration: 212.42 ms\tBilled Duration: 300 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413329,
+            "message": "START RequestId: cff7d012-72b4-4743-92dc-3c400fa9634d Version: $LATEST\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413350,
+            "message": "2 bottles of rootbeer.\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413530,
+            "message": "END RequestId: cff7d012-72b4-4743-92dc-3c400fa9634d\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413530,
+            "message": "REPORT RequestId: cff7d012-72b4-4743-92dc-3c400fa9634d\tDuration: 199.18 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413533,
+            "message": "START RequestId: 82c08996-aecb-40dd-b2c0-f8606e436f5b Version: $LATEST\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413570,
+            "message": "1 bottle of rootbeer.\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413716,
+            "message": "END RequestId: 82c08996-aecb-40dd-b2c0-f8606e436f5b\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413716,
+            "message": "REPORT RequestId: 82c08996-aecb-40dd-b2c0-f8606e436f5b\tDuration: 181.12 ms\tBilled Duration: 200 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413748,
+            "message": "START RequestId: fcf61732-0b15-462f-bccc-f9cc548b1308 Version: $LATEST\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413770,
+            "message": "All gone.\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413790,
+            "message": "END RequestId: fcf61732-0b15-462f-bccc-f9cc548b1308\n",
+            "ingestionTime": 1590873422117
+        },
+        {
+            "timestamp": 1590873413790,
+            "message": "REPORT RequestId: fcf61732-0b15-462f-bccc-f9cc548b1308\tDuration: 40.05 ms\tBilled Duration: 100 ms\tMemory Size: 128 MB\tMax Memory Used: 74 MB\t\n",
+            "ingestionTime": 1590873422117
+        }
+    ],
+    "nextForwardToken": "f/35477662644047363730954150427363719384107371004313206799",
+    "nextBackwardToken": "b/35477662223053895873093046739460872905909613312979763200"
+}
+root@196c6175b6bc:/repos/aws-auto#
+```
