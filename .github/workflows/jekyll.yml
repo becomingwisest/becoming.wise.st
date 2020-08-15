@@ -30,12 +30,6 @@ jobs:
       working-directory: ${{ github.workspace }}/../gh-pages
     - name: rsync _site to gh-pages
       run: rsync --progress --delete -a ${{ github.workspace }}/_site/ ${{ github.workspace }}/../gh-pages/ --exclude=.git/
-    - name: git add gh-pages
-      run: git add .
-      working-directory: ${{ github.workspace }}/../gh-pages
-    - name: commit gh-pages
-      run: git commit -m "$(date) $ACTIONS_RUNTIME_URL"
-      working-directory: ${{ github.workspace }}/../gh-pages
-    - name: push gh-pages
-      run: git push
+    - name: Publish
+      run: git add . && && git diff --cached --exit-code || git commit -m "$(date) $ACTIONS_RUNTIME_URL"  git push
       working-directory: ${{ github.workspace }}/../gh-pages
