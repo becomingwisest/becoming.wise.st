@@ -17,6 +17,7 @@ jobs:
     - name: Build the site in the jekyll/jekyll container
       run: |
         docker run \
+        --env JEKYLL_UID=$(id -u) --env JEKYLL_GID=$(id -g) \
         -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
         jekyll/jekyll:4.2.0 /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
     - name: Configure Git Author
