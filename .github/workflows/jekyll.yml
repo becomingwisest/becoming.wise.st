@@ -18,7 +18,7 @@ jobs:
       run: |
         docker run \
         -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/jekyll /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
+        jekyll/jekyll:4.2.0 /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
     - name: Configure Git Author
       run: |
         git config user.email "actions@github.com" && \
