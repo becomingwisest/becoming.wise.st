@@ -26,6 +26,12 @@
           </li>
           {% endif %}
 
+          {% if site.hachyderm_username %}
+          <li>
+            {% include icon-hachyderm.html username=site.hachyderm_username %}
+          </li>
+          {% endif %}
+
           {% if site.keybase_username %}
           <li>
             {% include icon-keybase.html username=site.keybase_username %}
