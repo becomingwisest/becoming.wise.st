@@ -25,7 +25,9 @@ jobs:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: get PATH
       id: path
-      run: echo "PATH=$PATH:${{ github.workspace }}/bin" | tee -a "$GITHUB_OUTPUT"
+      run: |
+        git status
+        echo "PATH=$PATH:${{ github.workspace }}/bin" | tee -a "$GITHUB_OUTPUT"
     - name: Build using local jekyll
       env:
         PATH: ${{needs.path.outputs.PATH}}
