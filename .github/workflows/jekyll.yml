@@ -20,7 +20,7 @@ jobs:
       working-directory: ${{ github.workspace }}/../gh-pages
     - uses: ruby/setup-ruby@v1
       env:
-        BUNDLE_BIN: true
+        BUNDLE_BIN: bin
       with:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: get PATH
