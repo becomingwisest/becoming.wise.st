@@ -19,6 +19,8 @@ jobs:
       run: git checkout --track origin/gh-pages
       working-directory: ${{ github.workspace }}/../gh-pages
     - uses: ruby/setup-ruby@v1
+      env:
+        BUNDLE_BIN: true
       with:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Build using local jekyll
