@@ -22,7 +22,7 @@ jobs:
       env:
         BUNDLE_BIN: bin
       with:
-        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+        bundler-cache: true
     - name: Build using local jekyll
       run: "PATH=$PATH:${{ github.workspace }}/bin" jekyll build --future
     - name: Configure Git Author
