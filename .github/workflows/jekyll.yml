@@ -28,6 +28,9 @@ jobs:
       run: |
         git status
         echo "PATH=$PATH:${{ github.workspace }}/bin" | tee -a "$GITHUB_OUTPUT"
+        PATH=$PATH:${{ github.workspace }}/bin jekyll -v
+        find bin
+        ls -l bin
     - name: Build using local jekyll
       env:
         PATH: ${{needs.path.outputs.PATH}}
