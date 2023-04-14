@@ -18,12 +18,13 @@ jobs:
     - name: checkout gh-pages
       run: git checkout --track origin/gh-pages
       working-directory: ${{ github.workspace }}/../gh-pages
-    - name: Build the site in the jekyll/jekyll container
-      run: |
-        docker run \
-        --env JEKYLL_UID=$(id -u) --env JEKYLL_GID=$(id -g) \
-        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/jekyll:4.2.0 /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
+    - uses: ruby/setup-ruby@v1
+      env:
+        BUNDLE_BIN: bin
+      with:
+        bundler-cache: true
+    - name: Build using local jekyll
+      run: PATH=$PATH:${{ github.workspace }}/bin jekyll build --future
     - name: Configure Git Author
       run: |
         git config --global user.email "actions@github.com" && \
