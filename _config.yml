@@ -26,6 +26,7 @@ exclude:
   - Gemfile.lock
   - Makefile
   - s3_website.yml
+  - bin
 
 # Based on http://garthdb.com/writings/i-am-a-jekyll-god/
 sass:
