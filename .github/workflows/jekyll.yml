@@ -32,7 +32,7 @@ jobs:
     - name: rsync _site to gh-pages
       run: rsync --progress --delete -a ${{ github.workspace }}/_site/ ${{ github.workspace }}/../gh-pages/ --exclude=.git/
     - name: Diff
-      run: git add . && git diff --cached --exit-code | tee -a $GITHUB_STEP_SUMMARY || git commit -m "$(date) $ACTIONS_RUNTIME_URL"
+      run: git add . && echo '```' >> $GITHUB_STEP_SUMMARY && git diff --cached --exit-code | tee -a $GITHUB_STEP_SUMMARY || echo '```' >> $GITHUB_STEP_SUMMARY && git commit -m "$(date) $ACTIONS_RUNTIME_URL"
       working-directory: ${{ github.workspace }}/../gh-pages
     - name: Publish
       if: ${{ github.ref == 'refs/heads/main' }}
